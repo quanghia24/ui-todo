@@ -21,6 +21,13 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import GridViewIcon from '@mui/icons-material/GridView';
+import TimerIcon from '@mui/icons-material/Timer';
+import WhereToVoteIcon from '@mui/icons-material/WhereToVote';
+
+import { useRouter } from 'next/navigation';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -107,7 +114,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MainLayout({children}: {children: React.ReactNode}) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [page, setPage] = React.useState<string>('Todos')
+  const router = useRouter();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -116,6 +125,27 @@ export default function MainLayout({children}: {children: React.ReactNode}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleChangePage = (page: string) => {
+    setPage(page);
+    switch (page) {
+      case 'Todos':
+        router.push('/todos');
+        break;
+      case 'Eisenhower matrix':
+        router.push('/matrix');
+        break;
+      case 'Pomodoro':
+        router.push('/pomo');
+        break;
+      case 'Habit':
+        router.push('/habit');
+        break;
+      default:
+        console.error('Unknown page:', page);
+        return;
+    }
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -137,7 +167,7 @@ export default function MainLayout({children}: {children: React.ReactNode}) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            {page}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -149,108 +179,62 @@ export default function MainLayout({children}: {children: React.ReactNode}) {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
-                ]}
-              >
-                <ListItemIcon
+          {['Todos', 'Eisenhower matrix', 'Pomodoro', 'Habit'].map((text, index) => (
+            <div onClick={() => handleChangePage(text)}>
+              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: 'center',
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: 'initial',
                         }
                       : {
-                          mr: 'auto',
+                          justifyContent: 'center',
                         },
                   ]}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: 'center',
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: 'auto',
+                          },
+                    ]}
+                  > 
+                    {text === 'Eisenhower matrix' && <GridViewIcon />}
+                    {text === 'Todos' && <ChecklistIcon />}
+                    {text === 'Pomodoro' && <TimerIcon />}
+                    {text === 'Habit' && <WhereToVoteIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </div>
           ))}
         </List>
         <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
-                ]}
-              >
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: 'center',
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

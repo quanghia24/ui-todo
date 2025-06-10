@@ -6,7 +6,7 @@ import "./globals.css";
 import MainLayout from "@/components/layout/MainLayout";
 
 
-import StyleLayout from "./StyledLayout";
+import StyleLayout from "./(main)/StyledLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MainLayout>
-          <StyleLayout children={children}/>
-        </MainLayout>
+        {children}
       </body>
     </html>
   );
