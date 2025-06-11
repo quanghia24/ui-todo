@@ -18,8 +18,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Button } from '@mui/material';
 
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -150,6 +149,8 @@ export default function MainLayout({children}: {children: React.ReactNode}) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
+
+      {/* Side bar */}
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
@@ -172,70 +173,96 @@ export default function MainLayout({children}: {children: React.ReactNode}) {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
+        <div className='flex flex-row items-center justify-between'>
+          {/* Signout button */}
+          <Button
+            sx={{
+              mx: 2,
+              boxShadow: 1,
+              transition: 'all 0.2s',
+              '&:hover': {
+                boxShadow: 2,
+                backgroundColor: 'transparent',
+                fontWeight: 'bold',
+                color: (theme) => theme.palette.error.main,
+                border: (theme) => `1px solid ${theme.palette.error.main}`,
+              },
+            }}
+            color="error"
+            variant="contained"
+            onClick={() => {
+              router.push('/login'); // Redirect to login page
+            }}
+          >
+            logout
+          </Button>
+
+          {/* Close drawer button */}
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </DrawerHeader>
+        </div>
         <Divider />
         <List>
           {['Todos', 'Eisenhower matrix', 'Pomodoro', 'Habit'].map((text, index) => (
-            <div onClick={() => handleChangePage(text)}>
-              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                <ListItemButton
+            <ListItem onClick={() => handleChangePage(text)} key={text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: 'initial',
+                      }
+                    : {
+                        justifyContent: 'center',
+                      },
+                ]}
+              >
+                <ListItemIcon
                   sx={[
                     {
-                      minHeight: 48,
-                      px: 2.5,
+                      minWidth: 0,
+                      justifyContent: 'center',
                     },
                     open
                       ? {
-                          justifyContent: 'initial',
+                          mr: 3,
                         }
                       : {
-                          justifyContent: 'center',
+                          mr: 'auto',
                         },
                   ]}
-                >
-                  <ListItemIcon
-                    sx={[
-                      {
-                        minWidth: 0,
-                        justifyContent: 'center',
-                      },
-                      open
-                        ? {
-                            mr: 3,
-                          }
-                        : {
-                            mr: 'auto',
-                          },
-                    ]}
-                  > 
-                    {text === 'Eisenhower matrix' && <GridViewIcon />}
-                    {text === 'Todos' && <ChecklistIcon />}
-                    {text === 'Pomodoro' && <TimerIcon />}
-                    {text === 'Habit' && <WhereToVoteIcon />}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                    sx={[
-                      open
-                        ? {
-                            opacity: 1,
-                          }
-                        : {
-                            opacity: 0,
-                          },
-                    ]}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </div>
+                > 
+                  {text === 'Eisenhower matrix' && <GridViewIcon />}
+                  {text === 'Todos' && <ChecklistIcon />}
+                  {text === 'Pomodoro' && <TimerIcon />}
+                  {text === 'Habit' && <WhereToVoteIcon />}
+                </ListItemIcon>
+                <ListItemText
+                  primary={text}
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
           ))}
         </List>
         <Divider />
       </Drawer>
+
+      {/* main content */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {children}

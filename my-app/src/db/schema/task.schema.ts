@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgTable, varchar, boolean, timestamp, uuid } from "drizzle-orm/pg-core";
-import { createSelectSchema, createInsertSchema } from "drizzle-zod";
+// import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 
 import { users } from "./user.schema"; 
 import { foreignKey } from "drizzle-orm/pg-core";
@@ -10,8 +10,11 @@ export const tasks = pgTable("tasks", {
     title: varchar("title").notNull(),
     description: varchar("description").notNull(),
     status: boolean().default(false).notNull(),
+    urgent: boolean().default(false).notNull(),
+    important: boolean().default(false).notNull(),
     userId: uuid("user_id").notNull(),
     createdAt: timestamp().defaultNow(),
+    updatedAt: timestamp().defaultNow(),
 }, (table) => [
     foreignKey({
         name: "user_fk",
@@ -29,15 +32,16 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     }) 
 }))
 
-export const TaskSchema = createSelectSchema(tasks);
-export const NewTaskSchema = createInsertSchema(tasks).pick({
-    title: true,
-    description: true,
-    status: true,
-});
+// export const TaskSchema = createSelectSchema(tasks);
 
-export const UpdateTaskSchema = createInsertSchema(tasks).partial().pick({
-    title: true,
-    description: true,
-    status: true,
-});
+// export const NewTaskSchema = createInsertSchema(tasks).pick({
+//     title: true,
+//     description: true,
+//     status: true,
+// });
+
+// export const UpdateTaskSchema = createInsertSchema(tasks).partial().pick({
+//     title: true,
+//     description: true,
+//     status: true,
+// });
