@@ -1,73 +1,74 @@
 "use client";
 
-import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Button } from '@mui/material';
+import * as React from "react";
+import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import MuiDrawer from "@mui/material/Drawer";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import GridViewIcon from "@mui/icons-material/GridView";
+import TimerIcon from "@mui/icons-material/Timer";
+import WhereToVoteIcon from "@mui/icons-material/WhereToVote";
 
-import ChecklistIcon from '@mui/icons-material/Checklist';
-import GridViewIcon from '@mui/icons-material/GridView';
-import TimerIcon from '@mui/icons-material/Timer';
-import WhereToVoteIcon from '@mui/icons-material/WhereToVote';
+import { redirect } from "next/navigation";
 
-import { useRouter } from 'next/navigation';
+import { logoutAction } from "@/app/actions/task";
+import ActionButton from "@/components/common/ActionButton";
 
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
-  transition: theme.transitions.create('width', {
+  transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: 'hidden',
+  overflowX: "hidden",
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
+  transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: 'hidden',
+  overflowX: "hidden",
   width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
+const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
 }));
 
 interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
+    open?: boolean;
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
+  transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
@@ -77,7 +78,7 @@ const AppBar = styled(MuiAppBar, {
       style: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
+        transition: theme.transitions.create(["width", "margin"], {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.enteringScreen,
         }),
@@ -86,187 +87,177 @@ const AppBar = styled(MuiAppBar, {
   ],
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme }) => ({
+const Drawer = styled(MuiDrawer, {
+    shouldForwardProp: (prop) => prop !== "open",
+})(({ theme }) => ({
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
+    whiteSpace: "nowrap",
+    boxSizing: "border-box",
     variants: [
-      {
+        {
         props: ({ open }) => open,
         style: {
-          ...openedMixin(theme),
-          '& .MuiDrawer-paper': openedMixin(theme),
+            ...openedMixin(theme),
+            "& .MuiDrawer-paper": openedMixin(theme),
         },
-      },
-      {
+        },
+        {
         props: ({ open }) => !open,
         style: {
-          ...closedMixin(theme),
-          '& .MuiDrawer-paper': closedMixin(theme),
+            ...closedMixin(theme),
+            "& .MuiDrawer-paper": closedMixin(theme),
         },
-      },
+        },
     ],
-  }),
-);
+}));
 
-export default function MainLayout({children}: {children: React.ReactNode}) {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [page, setPage] = React.useState<string>('Todos')
-  const router = useRouter();
+export default function MainLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    const theme = useTheme();
+    const [open, setOpen] = React.useState<boolean>(false);
+    const [page, setPage] = React.useState<string>("Todos"); 
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
-  const handleChangePage = (page: string) => {
-    setPage(page);
-    switch (page) {
-      case 'Todos':
-        router.push('/todos');
-        break;
-      case 'Eisenhower matrix':
-        router.push('/matrix');
-        break;
-      case 'Pomodoro':
-        router.push('/pomo');
-        break;
-      case 'Habit':
-        router.push('/habit');
-        break;
-      default:
-        console.error('Unknown page:', page);
-        return;
-    }
-  }
+    const handleChangePage = (page: string) => {
+        setPage(page);
+        switch (page) {
+        case "Todos":
+            redirect("/todos");
+        case "Eisenhower matrix":
+            redirect("/matrix"); 
+        case "Pomodoro":
+            redirect("/pomo"); 
+        case "Habit":
+            redirect("/habit"); 
+        default:
+            console.error("Unknown page:", page);
+            return;
+        }
+    };
 
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+    return (
+        <Box sx={{ display: "flex" }}>
+            <CssBaseline />
 
-      {/* Side bar */}
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                marginRight: 5,
-              },
-              open && { display: 'none' },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {page}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <div className='flex flex-row items-center justify-between'>
-          {/* Signout button */}
-          <Button
-            sx={{
-              mx: 2,
-              boxShadow: 1,
-              transition: 'all 0.2s',
-              '&:hover': {
-                boxShadow: 2,
-                backgroundColor: 'transparent',
-                fontWeight: 'bold',
-                color: (theme) => theme.palette.error.main,
-                border: (theme) => `1px solid ${theme.palette.error.main}`,
-              },
-            }}
-            color="error"
-            variant="contained"
-            onClick={() => {
-              router.push('/login'); // Redirect to login page
-            }}
-          >
-            logout
-          </Button>
-
-          {/* Close drawer button */}
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </DrawerHeader>
-        </div>
-        <Divider />
-        <List>
-          {['Todos', 'Eisenhower matrix', 'Pomodoro', 'Habit'].map((text, index) => (
-            <ListItem onClick={() => handleChangePage(text)} key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
-                ]}
-              >
-                <ListItemIcon
-                  sx={[
+            {/* Side bar */}
+            <AppBar position="fixed" open={open}>
+                <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: 'center',
+                        marginRight: 5,
                     },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
-                > 
-                  {text === 'Eisenhower matrix' && <GridViewIcon />}
-                  {text === 'Todos' && <ChecklistIcon />}
-                  {text === 'Pomodoro' && <TimerIcon />}
-                  {text === 'Habit' && <WhereToVoteIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
+                    open && { display: "none" },
+                    ]}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap component="div">
+                    {page}
+                </Typography>
+                </Toolbar>
+            </AppBar>
+            <Drawer variant="permanent" open={open}>
+                <div className="flex flex-row items-center justify-between">
+                    {/* Logout button */}
+                    <ActionButton handler={logoutAction} mcolor="error" text="logout"/>
 
-      {/* main content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        {children}
-      </Box>
-    </Box>
-  );
+                    {/* Close drawer button */}
+                    <DrawerHeader>
+                        <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === "rtl" ? (
+                            <ChevronRightIcon />
+                        ) : (
+                            <ChevronLeftIcon />
+                        )}
+                        </IconButton>
+                    </DrawerHeader>
+                </div>
+                <Divider />
+                <List>
+                    {["Todos", "Eisenhower matrix", "Pomodoro", "Habit"].map(
+                        (text, index) => (
+                        <ListItem
+                            onClick={() => handleChangePage(text)}
+                            key={text}
+                            disablePadding
+                            sx={{ display: "block" }}
+                        >
+                            <ListItemButton
+                            sx={[
+                                {
+                                minHeight: 48,
+                                px: 2.5,
+                                },
+                                open
+                                ? {
+                                    justifyContent: "initial",
+                                    }
+                                : {
+                                    justifyContent: "center",
+                                    },
+                            ]}
+                            >
+                            <ListItemIcon
+                                sx={[
+                                {
+                                    minWidth: 0,
+                                    justifyContent: "center",
+                                },
+                                open
+                                    ? {
+                                        mr: 3,
+                                    }
+                                    : {
+                                        mr: "auto",
+                                    },
+                                ]}
+                            >
+                                {text === "Eisenhower matrix" && <GridViewIcon />}
+                                {text === "Todos" && <ChecklistIcon />}
+                                {text === "Pomodoro" && <TimerIcon />}
+                                {text === "Habit" && <WhereToVoteIcon />}
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={text}
+                                sx={[
+                                open
+                                    ? {
+                                        opacity: 1,
+                                    }
+                                    : {
+                                        opacity: 0,
+                                    },
+                                ]}
+                            />
+                            </ListItemButton>
+                        </ListItem>
+                        )
+                    )}
+                </List>
+                <Divider />
+            </Drawer>
+
+            {/* main content */}
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                <DrawerHeader />
+                {children}
+            </Box>
+        </Box>
+    );
 }
