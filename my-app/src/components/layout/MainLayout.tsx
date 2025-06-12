@@ -25,7 +25,7 @@ import WhereToVoteIcon from "@mui/icons-material/WhereToVote";
 
 import { redirect } from "next/navigation";
 
-import { logoutAction } from "@/app/actions/task";
+import { logoutAction } from "@/app/actions/auth";
 import ActionButton from "@/components/common/ActionButton";
 
 const drawerWidth = 240;

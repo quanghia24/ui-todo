@@ -1,22 +1,8 @@
 "use client"
 import { Button } from "@mui/material";
-import { loginAction } from "@/app/actions/task";
+import { loginAction } from "@/app/actions/auth";
 
-export default function LoginPage() {
-	// const router = useRouter();
-	// const handleLogin = () => {
-	//   fetch('/api/users/login', {
-	//     method: 'GET',
-	//   }).then((res) => {
-	//     if (res.ok) {
-	//       return res.json();
-	//     } else {
-	//       throw new Error('Login failed');
-	//     }
-	//   }).then((data) => {
-	//     console.log(data);
-	//   })
-	// }
+export default function LoginPage() { 
 
 	return (
 		<>

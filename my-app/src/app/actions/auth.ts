@@ -1,6 +1,13 @@
+"use server"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation";
+// import { useDispatch } from "react-redux";
+
 import { FormState, SignupFormSchema } from "@/lib/definitions";
 import { createUser } from "@/db/queries/user.queries";
 import { WriteError, WriteJSON } from "@/utils/utils";
+import { setUser, clearUser } from "@/lib/features/users/userSlice"; 
+
 
 export async function signup(state: FormState, formData: FormData) {
     // validate form fields
@@ -27,4 +34,31 @@ export async function signup(state: FormState, formData: FormData) {
     // TODO:
     // 4. Create user session
     // 5. Redirect user
+}
+
+export async function loginAction() {
+    // const dispatch = useDispatch();
+    // dispatch(setUser({ userId: 'ae235c5e-2032-4bec-a9e0-bbd15a43af08' }))
+
+    const cookieStore = await cookies();
+    await cookieStore.set("userId", 'ae235c5e-2032-4bec-a9e0-bbd15a43af08');
+    redirect(`/todos`);
+}
+
+export async function logoutAction() {
+    // const dispatch = useDispatch();
+    // dispatch(clearUser());
+
+    const cookieStore = await cookies();
+    await cookieStore.delete("userId")
+    redirect(`/`);
+}
+
+export async function getUserId() {
+    const cookieStore = await cookies();
+    const userId = cookieStore.get("userId")?.value;
+    if (!userId) {
+        redirect(`/login`);
+    }
+    return userId;
 }

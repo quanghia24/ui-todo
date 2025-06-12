@@ -1,6 +1,6 @@
 'use server'
 
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, asc, desc } from "drizzle-orm";
 
 import { db } from "@/db/drizzle";
 import { tasks } from "@/db/schema/task.schema";
@@ -9,11 +9,12 @@ export async function getAllTasksBelongToUserId(userId: string) {
     let res = await db
         .select()
         .from(tasks)
-        .where(eq(tasks.userId, userId));
+        .where(eq(tasks.userId, userId))
+        .orderBy(asc(tasks.status), desc(tasks.urgent), desc(tasks.important), desc(tasks.updatedAt));
     return res;
 }  
 
-export async function createNewTask(userId: string, title: string, description: string= "" ) {
+export async function createNewTask(userId: string, title: string, description = "") {
     let res = await db
         .insert(tasks)
         .values({
@@ -22,7 +23,7 @@ export async function createNewTask(userId: string, title: string, description: 
             userId,
         })
         .returning()
-    return res;
+    return res[0];
 }
 
 export async function updateTask(taskId: string, title: string, description: string, status: boolean, urgent: boolean, important: boolean) {
