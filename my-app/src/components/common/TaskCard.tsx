@@ -45,9 +45,11 @@ export default function TaskCard({
     };
 
     const handleSelectRemove = () => {
+        handleRemove(todo.id)
         setContextMenu(null);
     };
     const handleSelectEdit = () => {
+        handleChosen(todo);
         setContextMenu(null);
     };
 

@@ -58,19 +58,7 @@ export default function DescriptionModal ({
         <div className="w-[49%] flex flex-col ">
             <Card className="p-2 h-[87vh]">
                 <CardContent>
-                    <div className="flex justify-between items-center">
-                        {/* <p>imported todo:</p>
-                        <ul>
-                            <li>u: {todo.urgent?"true":"false"}</li>
-                            <li>i: {todo.important?"true":"false"}</li>
-                        </ul>
-                        <p>local todo's data:</p>
-                        <ul>
-                            <li>u: {urgent?"true":"false"}</li>
-                            <li>i: {important?"true":"false"}</li>
-                        </ul>
-                        {/* Priority */}
-                        <p>Priority: {priority}</p> 
+                    <div className="flex justify-evenly items-center"> 
                         <IconButton onClick={() => handlePriorityChange(3)}>
                             <FlagIcon sx={{ verticalAlign: 'middle', color: `${priority==3? 'red':'gray'}` }}/>
                         </IconButton>

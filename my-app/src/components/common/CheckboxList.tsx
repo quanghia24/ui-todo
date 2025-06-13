@@ -25,7 +25,6 @@ export default function CheckboxList({
         onSuccess: (taskId) => {
             queryClient.invalidateQueries({ queryKey: ['todos', userId] });
             console.log(`Task with ID ${taskId} removed by user ${userId}`);
-
         },
     })
 
