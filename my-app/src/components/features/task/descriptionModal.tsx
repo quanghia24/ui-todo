@@ -1,17 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-
-import { IconButton, TextareaAutosize, Divider, TextField, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { IconButton, Divider, TextField, Card, CardContent } from '@mui/material';
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import FlagIcon from '@mui/icons-material/Flag';
-
-import ActionButton from "@/components/common/ActionButton"
-import { Task } from "@/types/types"
+import { useQueryClient } from "@tanstack/react-query" 
 import { useMutation } from "@tanstack/react-query"
-import { updateTask } from "@/db/queries/task.queries"
 
-import { useQueryClient } from "@tanstack/react-query"
+import { updateTask } from "@/db/queries/task.queries"
+import { Task } from "@/types/types"
+import ActionButton from "@/components/common/ActionButton"
+
 
 export default function DescriptionModal ({ 
     todo, 
@@ -23,12 +22,13 @@ export default function DescriptionModal ({
     const queryClient = useQueryClient()
     const [title, setTitle] = useState<string>(todo.title)
     const [desc, setDesc] = useState<string>(todo.description)
-    const [priority, setPriority] = useState<number>((todo.urgent?1:0) + (todo.important?1:0)) 
+    const [priority, setPriority] = useState<number>((todo.urgent?2:0) + (todo.important?1:0)) 
     
     useEffect(() => {
         setTitle(todo.title)
-        setDesc(todo.description)
-    }, [todo.title, todo.description])
+        setDesc(todo.description) 
+        setPriority((todo.urgent?2:0) + (todo.important?1:0))
+    }, [todo])
     
     const updatemutation = useMutation({
         mutationFn: (update: Task) => 
@@ -38,35 +38,20 @@ export default function DescriptionModal ({
         }
     })
 
-    const handleUpdate = () => {
+    const handleUpdate = (p: number) => { 
         const updatedTodo: Task = {
             ...todo,
             title: title,
-            description: desc
+            description: desc,
+            urgent: p >= 2,
+            important: p % 2 == 1,
         }
         updatemutation.mutate(updatedTodo)
     }
 
-    const handlePriorityChange = (priority: number) => {
-        let _urgent = false
-        let _important = false
-
-        if (priority == 1){
-            _important = true
-        } else if (priority == 2) {
-            _urgent = true
-        } else if (priority == 3) {
-            _urgent = true
-            _important = true
-        }
-
-        const updatedTodo: Task = {
-            ...todo,
-            urgent: _urgent,
-            important: _important
-        }
-        updatemutation.mutate(updatedTodo)
-        setPriority(priority)
+    const handlePriorityChange = (value: number) => {
+        setPriority(value);
+        handleUpdate(value)
     }
 
     return (
@@ -74,7 +59,18 @@ export default function DescriptionModal ({
             <Card className="p-2 h-[87vh]">
                 <CardContent>
                     <div className="flex justify-between items-center">
-                        {/* most import */}
+                        {/* <p>imported todo:</p>
+                        <ul>
+                            <li>u: {todo.urgent?"true":"false"}</li>
+                            <li>i: {todo.important?"true":"false"}</li>
+                        </ul>
+                        <p>local todo's data:</p>
+                        <ul>
+                            <li>u: {urgent?"true":"false"}</li>
+                            <li>i: {important?"true":"false"}</li>
+                        </ul>
+                        {/* Priority */}
+                        <p>Priority: {priority}</p> 
                         <IconButton onClick={() => handlePriorityChange(3)}>
                             <FlagIcon sx={{ verticalAlign: 'middle', color: `${priority==3? 'red':'gray'}` }}/>
                         </IconButton>
@@ -104,8 +100,11 @@ export default function DescriptionModal ({
                         value={desc}
                         onChange={(e) => setDesc(e.target.value)}                        
                     />
+                    <p className="text-gray-500 italic font-extralight underline text-sm">Last update: {todo.updatedAt!.getDate()}/{todo.updatedAt!.getMonth()}</p>
                 </CardContent>
-                {(title !== todo.title || desc !== todo.description) && <ActionButton handler={handleUpdate} mcolor="success" text="Save changes"/>}
+
+                {/* Save button */}
+                {(title !== todo.title || desc !== todo.description) && <ActionButton handler={() => handleUpdate(priority)} mcolor="inherit" text="Save changes"/>}
             </Card>
         </div>
     )

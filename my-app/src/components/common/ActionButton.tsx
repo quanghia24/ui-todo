@@ -17,8 +17,8 @@ export default function ActionButton({
                     boxShadow: 2,
                     backgroundColor: "transparent",
                     fontWeight: "bold",
-                    color: (theme) => theme.palette.error.main,
-                    border: (theme) => `1px solid ${theme.palette.error.main}`,
+                    color: (theme) => theme.palette.info.main,
+                    border: (theme) => `1px solid ${theme.palette.info.main}`,
                 },
             }}
             color={mcolor}

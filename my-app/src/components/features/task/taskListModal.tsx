@@ -1,20 +1,25 @@
 "use client"
 
-import { Box, Divider, TextField, Card, IconButton } from "@mui/material";
+// external
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllTasksBelongToUserId, createNewTask, removeTask } from "@/db/queries/task.queries";
-import { Task } from "@/types/types";
+import { TextField, Card } from "@mui/material";
 import { useState } from "react";
+
+// internal
+import { getAllTasksBelongToUserId, createNewTask } from "@/db/queries/task.queries";
+import CheckboxList from "@/components/common/CheckboxList";   
+import { Task } from "@/types/types"; 
+
+// local
 import DescriptionModal from "./descriptionModal";
-import CheckboxList from "@/components/common/CheckboxList"; 
 
 export default function TodosList({ 
-    initialTodos, userId 
+    initialTodos, 
+    userId 
 }: {
     initialTodos: Task[],
     userId: string
-}) {
-    // const userId = "ae235c5e-2032-4bec-a9e0-bbd15a43af08";
+}) { 
     const queryClient = useQueryClient();
     const [chosenTodo, setChosenTodo] = useState<Task| null>(null)
     const [newTitle, setNewTitle] = useState<string>('');
@@ -25,21 +30,25 @@ export default function TodosList({
         initialData: initialTodos,
     });
 
-    
+    // const { data, isPending, isError} = useTasks({initialTodos, userId});
+
     const addmutation = useMutation({
-        mutationFn: (title: string) => createNewTask(userId, title, ""),
+        mutationFn: (title: string) => {
+            return createNewTask(userId, title, "")
+        },
         onSuccess: (newTask: Task) => {
             queryClient.invalidateQueries({ queryKey: ['todos', userId] });
             setChosenTodo(newTask);
+            setNewTitle(''); 
         },
         retry: 3,
     })
     
     const handleAddTask = () => {
         addmutation.mutate(newTitle);
-        // setNewTitle(''); 
+        console.log(newTitle);
     }
-    
+
     if (isPending) return <div>Loading...</div>;
     if (isError) return <div>Error loading todos</div>;
     
@@ -47,20 +56,24 @@ export default function TodosList({
         <div className="flex justify-between" >   
             <div className="w-[49%] flex flex-col">
                 <Card className="p-2 h-[87vh]">
-                    <div className="overflow-y-scroll no-scrollbar">
+                    <div className="flex flex-col h-full">
                         {/* Input new task box */}
-                        <div className="">
-                            <form className="mt-2" onSubmit={handleAddTask}>
-                                <TextField fullWidth label="Add task" variant="outlined" value={newTitle} onChange={(e) => {setNewTitle(e.target.value)}} onSubmit={handleAddTask}/>
+                        <div>
+                            <form className="mt-2" action={handleAddTask}>
+                                <TextField fullWidth label="Add task" variant="outlined" value={newTitle} onChange={(e) => {setNewTitle(e.target.value)}}/>
                             </form>
-                            <p className="text-gray-400 pl-3">Completed | count: {data.filter(todo => todo.status).length}</p> 
+                            <p className="text-gray-400 pl-3 mt-2">Completed | count: {data.filter(todo => todo.status).length}</p> 
                         </div>
-                        {/* Done */}  
-                        <CheckboxList handler={setChosenTodo}  data={data} userId={userId}/>
+                        
+                        {/* Checked tasks */}  
+                        <div className="overflow-y-scroll no-scrollbar flex-1">
+                            <CheckboxList handler={setChosenTodo}  data={data} userId={userId}/>
+                        </div>
                     </div>
                 </Card>
-            </div>
-            {/* second half*/}
+            </div>  
+
+            {/* Task Detail */}
             {chosenTodo && <DescriptionModal todo={chosenTodo} userId={userId}/>}
         </div> 
     );

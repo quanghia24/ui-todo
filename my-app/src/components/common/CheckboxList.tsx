@@ -1,19 +1,13 @@
 "use client"
 
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-import { Task } from '@/types/types'; 
-
+import { List, ListItem, ListItemIcon, ListItemButton, Checkbox } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { removeTask, updateTask } from '@/db/queries/task.queries';
+import { Task } from '@/types/types'; 
+import TaskCard from '@/components/common/TaskCard';
+
 
 export default function CheckboxList({ 
     data,
@@ -59,30 +53,32 @@ export default function CheckboxList({
                 bgcolor: 'background.paper' 
             }}
         >
-        {data.map((todo) => {
-            const labelId = `checkbox-list-label-${todo.id}`;
+        {data.map((todo) => { 
             return (
             <ListItem
                 key={todo.id}
-                secondaryAction={
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveTask(todo.id)}>
-                        <DeleteIcon />
-                    </IconButton>
-                }
                 disablePadding
+                className={`
+                    rounded-lg
+                    mb-0.5
+                    ${!todo.status && todo.urgent && todo.important?'bg-red-200':''}
+                    ${!todo.status && todo.urgent && !todo.important?'bg-yellow-200':''}
+                    ${!todo.status && !todo.urgent && todo.important?'bg-blue-200':''}
+                    ${!todo.status && !todo.urgent && !todo.important?'bg-gray-200':''}
+                `}
             >
-                <ListItemButton role={undefined} onClick={() => {handler(todo)}} dense>
-                <ListItemIcon>
-                    <Checkbox
-                        edge="start"
-                        checked={todo.status}
-                        tabIndex={-1}
-                        disableRipple 
-                        color='default'
-                        onClick={() => handleToggle(todo)}
-                    />
-                </ListItemIcon> 
-                <p className={`${todo.status?'text-gray-400':''} `}>{todo.title}</p>
+                <ListItemButton  role={undefined} onClick={() => {handler(todo)}} dense>                   
+                    <ListItemIcon>
+                        <Checkbox
+                            edge="start"
+                            checked={todo.status}
+                            tabIndex={-1}
+                            disableRipple 
+                            color='default'
+                            onClick={() => handleToggle(todo)}
+                        />
+                    </ListItemIcon> 
+                    <TaskCard todo={todo} handleRemove={handleRemoveTask} handleChosen={handler}/>
                 </ListItemButton>
             </ListItem>
             );
