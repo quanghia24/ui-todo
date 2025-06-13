@@ -6,13 +6,7 @@ export default defineConfig({
     out: "./src/db/migrations",
     dialect: "postgresql",
     dbCredentials: {
-        url:"postgres://ryan:12345@localhost:5432/superb-todo",
-        // host: process.env.DB_HOST!,
-        // port: parseInt(process.env.DB_PORT_NO!),
-        // user: process.env.DB_USERNAME!,
-        // password: process.env.DB_PASSWORD!,
-        // database: process.env.DB_NAME!,
-        // ssl: "require",
+        url: process.env.DATABASE_URL! || ":))",
     },
     migrations: {
         table: 'my-migrations-table', // `__drizzle_migrations` by default
