@@ -24,13 +24,14 @@ export default function TodosList({
     const [chosenTodo, setChosenTodo] = useState<Task| null>(null)
     const [newTitle, setNewTitle] = useState<string>('');
 
+    // const { data, isPending, isError} = useTasks({initialTodos, userId});
     const { data, isPending, isError} = useQuery({
         queryKey: ['todos', userId],
         queryFn: () => getAllTasksBelongToUserId(userId), 
         initialData: initialTodos,
     });
-
-    // const { data, isPending, isError} = useTasks({initialTodos, userId});
+    if (isPending) return <div>Loading...</div>;
+    if (isError) return <div>Error loading todos</div>;
 
     const addmutation = useMutation({
         mutationFn: (title: string) => {
@@ -49,9 +50,6 @@ export default function TodosList({
         console.log(newTitle);
     }
 
-    if (isPending) return <div>Loading...</div>;
-    if (isError) return <div>Error loading todos</div>;
-    
     return (
         <div className="flex justify-between" >   
             <div className="w-[49%] flex flex-col">

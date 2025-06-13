@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import { pgTable, varchar, boolean, timestamp, uuid } from "drizzle-orm/pg-core";
-// import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 
 import { users } from "./user.schema"; 
 import { foreignKey } from "drizzle-orm/pg-core";
@@ -32,16 +31,3 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     }) 
 }))
 
-// export const TaskSchema = createSelectSchema(tasks);
-
-// export const NewTaskSchema = createInsertSchema(tasks).pick({
-//     title: true,
-//     description: true,
-//     status: true,
-// });
-
-// export const UpdateTaskSchema = createInsertSchema(tasks).partial().pick({
-//     title: true,
-//     description: true,
-//     status: true,
-// });

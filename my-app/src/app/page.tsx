@@ -1,17 +1,30 @@
-"use client"
-
 import { Container, Typography } from '@mui/material';
 import { redirect } from 'next/navigation';
 
-export default function Home() { 
-	const login = false;
-	if (login) {
-		redirect('/todos');
+import { auth0 } from '@/lib/auth0';
+
+export default async function Home() { 
+	const session = await auth0.getSession();
+	if (!session) {
+		return (
+			<main>
+				<a href="/auth/login?screen_hint=signup">
+				<button>Sign up</button>
+				</a>
+				<a href="/auth/login">
+				<button>Log in</button>
+				</a>
+			</main>
+		);
 	}
 	return ( 
 		<Container>
 			<Typography variant="h4">Welcome to the Home Page</Typography>
-			<button className='border' onClick={() => {redirect('/login')}}>goto login</button>
+			<div className='flex justify-evenly'>
+				<button className='border' onClick={() => {redirect('/login')}}>Login with auth0</button>
+				<button className='border' onClick={() => {redirect('/auth/login')}}>Login in quote</button>
+				<a  href="/auth/login">{"[login]"}</a>
+			</div>
 		</Container>
 	);
 }
