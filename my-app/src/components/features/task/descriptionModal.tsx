@@ -75,8 +75,22 @@ export default function DescriptionModal ({
                 </CardContent>
                 <Divider orientation="horizontal"/>    
                 <CardContent>
-                    {/* Title */}
-                    <TextField sx={{ mb: 2 }} fullWidth label="Title" id="title" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                    <TextField
+                        sx={{
+                            mb: 2,
+                            '& .MuiInputBase-input': {
+                                fontSize: '1.5rem', // Increase font size for input text
+                            },
+                            '& .MuiInputLabel-root': {
+                                fontSize: '1.2rem', // Increase font size for label
+                            },
+                        }}
+                        fullWidth
+                        label="Title"
+                        id="title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
 
                     {/* Description */}
                     <TextField
@@ -88,11 +102,13 @@ export default function DescriptionModal ({
                         value={desc}
                         onChange={(e) => setDesc(e.target.value)}                        
                     />
-                    <p className="text-gray-500 italic font-extralight underline text-sm">Last update: {todo.updatedAt!.getDate()}/{todo.updatedAt!.getMonth()}</p>
                 </CardContent>
-
                 {/* Save button */}
                 {(title !== todo.title || desc !== todo.description) && <ActionButton handler={() => handleUpdate(priority)} mcolor="inherit" text="Save changes"/>}
+                <div className='flex justify-end'>
+                    <p className="text-gray-500 italic font-extralight underline text-sm">Last update: {todo.updatedAt!.getDate()}/{todo.updatedAt!.getMonth()}</p>
+                </div>
+
             </Card>
         </div>
     )
