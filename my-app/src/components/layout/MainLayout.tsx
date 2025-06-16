@@ -25,7 +25,6 @@ import WhereToVoteIcon from "@mui/icons-material/WhereToVote";
 
 import { redirect } from "next/navigation";
 
-import { logoutAction } from "@/app/actions/auth";
 import ActionButton from "@/components/common/ActionButton";
 
 const drawerWidth = 240;
@@ -175,7 +174,7 @@ export default function MainLayout({
             <Drawer variant="permanent" open={open}>
                 <div className="flex flex-row items-center justify-between">
                     {/* Logout button */}
-                    <ActionButton handler={logoutAction} mcolor="error" text="logout"/>
+                    <ActionButton handler={() => {redirect('/auth/logout')}} mcolor="error" text="logout"/>
 
                     {/* Close drawer button */}
                     <DrawerHeader>

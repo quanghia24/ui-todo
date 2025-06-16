@@ -1,5 +1,5 @@
 {
-  "id": "4198fb42-7677-4fc8-aa14-e6f4cc361685",
+  "id": "73a344f4-d559-4ba1-9fe4-0dc7f324ef30",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -34,9 +34,23 @@
           "notNull": true,
           "default": false
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
+        "urgent": {
+          "name": "urgent",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "important": {
+          "name": "important",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "auth0_sub": {
+          "name": "auth0_sub",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -56,21 +70,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "user_fk": {
-          "name": "user_fk",
-          "tableFrom": "tasks",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "tasks_id_unique": {
@@ -79,58 +79,12 @@
           "columns": [
             "id"
           ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "password": {
-          "name": "password",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "users_id_unique": {
-          "name": "users_id_unique",
+        "tasks_auth0_sub_unique": {
+          "name": "tasks_auth0_sub_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "id"
-          ]
-        },
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
+            "auth0_sub"
           ]
         }
       },
