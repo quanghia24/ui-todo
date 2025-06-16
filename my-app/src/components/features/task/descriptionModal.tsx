@@ -6,6 +6,7 @@ import FlagIcon from '@mui/icons-material/Flag';
 import { useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query" 
 import { useMutation } from "@tanstack/react-query"
+import { useDebouncedCallback } from 'use-debounce';
 
 import { updateTask } from "@/db/queries/task.queries"
 import { Task } from "@/types/types"
@@ -21,6 +22,16 @@ export default function DescriptionModal ({
     const [title, setTitle] = useState<string>(todo.title)
     const [desc, setDesc] = useState<string>(todo.description)
     const [priority, setPriority] = useState<number>((todo.urgent?2:0) + (todo.important?1:0)) 
+    // Debounced save function to prevent excessive calls
+    const debouncedSave = useDebouncedCallback((title: string, description: string) => {
+        const updatedTodo: Task = {
+            ...todo,
+            title,
+            description,
+        }
+        updatemutation.mutate(updatedTodo)
+    }, 500);
+
     
     useEffect(() => {
         setTitle(todo.title)
@@ -89,8 +100,8 @@ export default function DescriptionModal ({
                             id="title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            onBlur={() => {debouncedSave(title, desc)}}               
                         />
-
                         {/* Description */}
                         <TextField
                             id="outlined-multiline-static"
@@ -99,7 +110,8 @@ export default function DescriptionModal ({
                             fullWidth
                             rows={24}
                             value={desc}
-                            onChange={(e) => setDesc(e.target.value)}                        
+                            onChange={(e) => setDesc(e.target.value)}         
+                            onBlur={() => {debouncedSave(title, desc)}}               
                         />
                     </form>
                 </CardContent>

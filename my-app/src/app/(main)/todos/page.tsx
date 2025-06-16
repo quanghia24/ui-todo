@@ -11,11 +11,7 @@ export default async function TodosPage() {
     if (!session) {
         redirect('/auth/logic');
     }
-    const userId = session?.user.sub;
-    
-    if(userId) {
-        console.log("here is userId", userId)
-    }
+    const userId = session.user.sub;
 
     // get all 'task' data belong to user
     const todos = await getAllTasksBelongToUserId(userId);
