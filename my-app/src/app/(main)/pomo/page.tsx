@@ -1,3 +1,6 @@
+// timer clock
+// clock run out -> mark task as completed
+
 export default function PomodoroPage() {
 	return (
 		<div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg overflow-hidden">

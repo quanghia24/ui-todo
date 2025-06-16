@@ -2,11 +2,10 @@
 
 import * as React from 'react';
 import { List, ListItem, ListItemIcon, ListItemButton, Checkbox } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { removeTask, updateTask } from '@/db/queries/task.queries';
-import { Task } from '@/types/types'; 
+import { useRemoveTasksMutation, useUpdateTasksMutation } from '@/lib/queries/tanstack.query';
 import TaskCard from '@/components/common/TaskCard';
+import { Task } from '@/types/types'; 
 
 
 export default function CheckboxList({ 
@@ -18,31 +17,19 @@ export default function CheckboxList({
     handler: (value: Task) => void,
     userId: string,
 }) {
-    const queryClient = useQueryClient(); 
-
-    const removemutation = useMutation({
-        mutationFn: (taskId: string) => removeTask(taskId),
-        onSuccess: (taskId) => {
-            queryClient.invalidateQueries({ queryKey: ['todos', userId] });
-            console.log(`Task with ID ${taskId} removed by user ${userId}`);
-        },
-    })
-
-    const updatemutation = useMutation({
-        mutationFn: (update: Task) => 
-            updateTask(update.id, update.title, update.description, update.status, update.urgent, update.important),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todos', userId] });
-        }
-    })
+    // useMutation for removing data
+    const removeMutation = useRemoveTasksMutation({ userId })
+    
+    // useMutation for updating data
+    const updateMutation = useUpdateTasksMutation({ userId })
 
     const handleToggle = (todo: Task) => { 
         todo.status = !todo.status;
-        updatemutation.mutate(todo)
+        updateMutation.mutate(todo)
     };
 
     const handleRemoveTask = (taskId: string) => {
-        removemutation.mutate(taskId);
+        removeMutation.mutate(taskId);
     }
 
     return (

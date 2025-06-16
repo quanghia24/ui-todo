@@ -1,15 +1,11 @@
 "use client"
-
 // external
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { TextField, Card } from "@mui/material";
 import { useState } from "react";
-
-// internal
-import { getAllTasksBelongToUserId, createNewTask } from "@/db/queries/task.queries";
+// internal 
 import CheckboxList from "@/components/common/CheckboxList";   
 import { Task } from "@/types/types"; 
-
+import { useAddTasksMutation, useGetTasksQuery } from "@/lib/queries/tanstack.query";
 // local
 import DescriptionModal from "./descriptionModal";
 
@@ -19,39 +15,25 @@ export default function TodosList({
 }: {
     initialTodos: Task[],
     userId: string
-}) { 
-    const queryClient = useQueryClient();
+}) {  
     const [chosenTodo, setChosenTodo] = useState<Task| null>(null)
     const [newTitle, setNewTitle] = useState<string>('');
 
-    // const { data, isPending, isError} = useTasks({initialTodos, userId});
-    const { data, isPending, isError} = useQuery({
-        queryKey: ['todos', userId],
-        queryFn: () => getAllTasksBelongToUserId(userId), 
-        initialData: initialTodos,
-    });
+    // useQuery for fetching data
+    const { data, isPending, isError} = useGetTasksQuery({initialTodos, userId});
     if (isPending) return <div>Loading...</div>;
     if (isError) return <div>Error loading todos</div>;
 
-    const addmutation = useMutation({
-        mutationFn: (title: string) => {
-            return createNewTask(userId, title, "")
-        },
-        onSuccess: (newTask: Task) => {
-            queryClient.invalidateQueries({ queryKey: ['todos', userId] });
-            setChosenTodo(newTask);
-            setNewTitle(''); 
-        },
-        retry: 3,
-    })
+    // useMutation for adding data
+    const addMutation = useAddTasksMutation({userId, setChosenTodo, setNewTitle});
     
     const handleAddTask = () => {
-        addmutation.mutate(newTitle);
+        addMutation.mutate(newTitle);
         console.log(newTitle);
     }
 
     return (
-        <div className="flex justify-between" >   
+        <div className="flex justify-between" >  
             <div className="w-[49%] flex flex-col">
                 <Card className="p-2 h-[87vh]">
                     <div className="flex flex-col h-full">

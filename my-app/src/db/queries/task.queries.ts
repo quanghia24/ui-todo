@@ -3,13 +3,13 @@
 import { eq, sql, asc, desc } from "drizzle-orm";
 
 import { db } from "@/db/drizzle";
-import { tasks } from "@/db/schema/task.schema";
+import { tasks } from "@/db/schema/task.schema"; 
 
 export async function getAllTasksBelongToUserId(userId: string) {
     let res = await db
         .select()
         .from(tasks)
-        .where(eq(tasks.userId, userId))
+        .where(eq(tasks.auth0_sub, userId))
         .orderBy(asc(tasks.status), desc(tasks.urgent), desc(tasks.important), desc(tasks.updatedAt));
     return res;
 }  
@@ -20,7 +20,7 @@ export async function createNewTask(userId: string, title: string, description =
         .values({
             title,
             description,
-            userId,
+            auth0_sub: userId,
         })
         .returning()
     return res[0];

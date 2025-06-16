@@ -9,8 +9,6 @@ import { useMutation } from "@tanstack/react-query"
 
 import { updateTask } from "@/db/queries/task.queries"
 import { Task } from "@/types/types"
-import ActionButton from "@/components/common/ActionButton"
-
 
 export default function DescriptionModal ({ 
     todo, 
@@ -75,36 +73,36 @@ export default function DescriptionModal ({
                 </CardContent>
                 <Divider orientation="horizontal"/>    
                 <CardContent>
-                    <TextField
-                        sx={{
-                            mb: 2,
-                            '& .MuiInputBase-input': {
-                                fontSize: '1.5rem', // Increase font size for input text
-                            },
-                            '& .MuiInputLabel-root': {
-                                fontSize: '1.2rem', // Increase font size for label
-                            },
-                        }}
-                        fullWidth
-                        label="Title"
-                        id="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
+                    <form action={() => handleUpdate(priority)}>
+                        <TextField
+                            sx={{
+                                mb: 2,
+                                '& .MuiInputBase-input': {
+                                    fontSize: '1.5rem', // Increase font size for input text
+                                },
+                                '& .MuiInputLabel-root': {
+                                    fontSize: '1.2rem', // Increase font size for label
+                                },
+                            }}
+                            fullWidth
+                            label="Title"
+                            id="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
 
-                    {/* Description */}
-                    <TextField
-                        id="outlined-multiline-static"
-                        label="Description"  
-                        multiline
-                        fullWidth
-                        rows={23}
-                        value={desc}
-                        onChange={(e) => setDesc(e.target.value)}                        
-                    />
+                        {/* Description */}
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Description"  
+                            multiline
+                            fullWidth
+                            rows={24}
+                            value={desc}
+                            onChange={(e) => setDesc(e.target.value)}                        
+                        />
+                    </form>
                 </CardContent>
-                {/* Save button */}
-                {(title !== todo.title || desc !== todo.description) && <ActionButton handler={() => handleUpdate(priority)} mcolor="inherit" text="Save changes"/>}
                 <div className='flex justify-end'>
                     <p className="text-gray-500 italic font-extralight underline text-sm">Last update: {todo.updatedAt!.getDate()}/{todo.updatedAt!.getMonth()}</p>
                 </div>

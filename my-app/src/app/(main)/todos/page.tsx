@@ -1,32 +1,30 @@
 import { cookies } from "next/headers";
 
 import { getAllTasksBelongToUserId } from "@/db/queries/task.queries";
-import TodosList from "@/components/features/task/taskListModal" 
-import { redirect } from "next/navigation";
-import ActionButton from "@/components/common/ActionButton";
+import TodosList from "@/components/features/task/taskListModal"  
 import { auth0 } from "@/lib/auth0";
-import { setEngine } from "crypto";
+import { redirect } from "next/navigation";
 
 export default async function TodosPage() { 
+    // set user_sub from cookie.
+    const session = await auth0.getSession();
+    if (!session) {
+        redirect('/auth/logic');
+    }
+    const userId = session?.user.sub;
     
-    const cookieStore = await cookies();
-    
-    const user_sub = await cookieStore.get('user_sub')?.value;
-    if (!user_sub) {
-        console.log("user_sub doesn't exist");
-        // redirect('/');
-    } else {
-        console.log("user:", user_sub);
+    if(userId) {
+        console.log("here is userId", userId)
     }
 
-    // const todos = await getAllTasksBelongToUserId(user_sub);
+    // get all 'task' data belong to user
+    const todos = await getAllTasksBelongToUserId(userId);
 
     return (
         // future plan: responsive
         // if screen is small, the second half change into a sidebar model appear from the right side
-        <div>
-            {/* <TodosList initialTodos={todos} userId={user_sub}/> */}
-            {user_sub}
-        </div>
+        <>
+            <TodosList initialTodos={todos} userId={userId}/>
+        </>
     );
 }

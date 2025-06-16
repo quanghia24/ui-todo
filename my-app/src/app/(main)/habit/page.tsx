@@ -1,3 +1,5 @@
+// send reminder everyday
+
 export default function HabitPage() {
     return (
         <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg overflow-hidden">

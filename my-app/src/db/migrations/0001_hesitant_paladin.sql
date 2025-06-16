@@ -1,0 +1,1 @@
+ALTER TABLE "tasks" DROP CONSTRAINT "tasks_auth0_sub_unique";

@@ -26,6 +26,7 @@ import WhereToVoteIcon from "@mui/icons-material/WhereToVote";
 import { redirect } from "next/navigation";
 
 import ActionButton from "@/components/common/ActionButton";
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -145,6 +146,13 @@ export default function MainLayout({
         }
     };
 
+    const handleLogout = () => {
+        // clear cookie
+        Cookies.remove('userId');
+        // clear session
+        redirect('/auth/logout');
+    }
+
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
@@ -174,7 +182,7 @@ export default function MainLayout({
             <Drawer variant="permanent" open={open}>
                 <div className="flex flex-row items-center justify-between">
                     {/* Logout button */}
-                    <ActionButton handler={() => {redirect('/auth/logout')}} mcolor="error" text="logout"/>
+                    <ActionButton handler={handleLogout} mcolor="error" text="logout"/>
 
                     {/* Close drawer button */}
                     <DrawerHeader>
