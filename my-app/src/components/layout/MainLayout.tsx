@@ -22,11 +22,11 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import GridViewIcon from "@mui/icons-material/GridView";
 import TimerIcon from "@mui/icons-material/Timer";
 import WhereToVoteIcon from "@mui/icons-material/WhereToVote";
+import BookIcon from '@mui/icons-material/Book';
 
 import { redirect } from "next/navigation";
 
-import ActionButton from "@/components/common/ActionButton";
-import Cookies from "js-cookie";
+import ActionButton from "@/components/common/ActionButton"; 
 
 const drawerWidth = 240;
 
@@ -132,23 +132,23 @@ export default function MainLayout({
     const handleChangePage = (page: string) => {
         setPage(page);
         switch (page) {
-        case "Todos":
-            redirect("/todos");
-        case "Eisenhower matrix":
-            redirect("/matrix"); 
-        case "Pomodoro":
-            redirect("/pomo"); 
-        case "Habit":
-            redirect("/habit"); 
-        default:
-            console.error("Unknown page:", page);
-            return;
+            case "Todos":
+                redirect("/todos");
+            case "Eisenhower matrix":
+                redirect("/matrix"); 
+            case "Pomodoro":
+                redirect("/pomo"); 
+            case "Habit":
+                redirect("/habit"); 
+            case "Blog":
+                redirect("/blog")
+            default:
+                console.error("Unknown page:", page);
+                return;
         }
     };
 
     const handleLogout = () => {
-        // clear cookie
-        Cookies.remove('userId');
         // clear session
         redirect('/auth/logout');
     }
@@ -197,8 +197,8 @@ export default function MainLayout({
                 </div>
                 <Divider />
                 <List>
-                    {["Todos", "Eisenhower matrix", "Pomodoro", "Habit"].map(
-                        (text, index) => (
+                    {["Todos", "Eisenhower matrix", "Pomodoro", "Habit", "Blog"].map(
+                        (text, _) => (
                         <ListItem
                             onClick={() => handleChangePage(text)}
                             key={text}
@@ -239,6 +239,7 @@ export default function MainLayout({
                                 {text === "Todos" && <ChecklistIcon />}
                                 {text === "Pomodoro" && <TimerIcon />}
                                 {text === "Habit" && <WhereToVoteIcon />}
+                                {text === "Blog" && <BookIcon/>}
                             </ListItemIcon>
                             <ListItemText
                                 primary={text}

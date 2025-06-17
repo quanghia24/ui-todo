@@ -15,6 +15,8 @@ export function useGetTasksQuery ({
         queryKey: ['todos', userId],
         queryFn: () => getAllTasksBelongToUserId(userId),
         initialData: initialTodos,
+        staleTime: 5*60*1000,
+        retry: 2,
     })
 }
 

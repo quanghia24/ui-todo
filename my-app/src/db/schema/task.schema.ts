@@ -8,7 +8,7 @@ export const tasks = pgTable("tasks", {
     status: boolean().default(false).notNull(),
     urgent: boolean().default(false).notNull(),
     important: boolean().default(false).notNull(),
-    auth0_sub: varchar().notNull(),
-    createdAt: timestamp().defaultNow(),
-    updatedAt: timestamp().defaultNow()
+    authId: varchar().notNull(),
+    createdAt: timestamp({withTimezone: true}).defaultNow(),
+    updatedAt: timestamp({withTimezone: true}).defaultNow()
 });

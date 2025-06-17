@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ryan
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: superb-todo
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT_NO: 5432
+      DB_USERNAME: ryan
+      DB_PASSWORD: 12345
+      DB_NAME: superb-todo
+      DATABASE_URL: postgres://ryan:12345@db:5432/superb-todo
+      API_PORT: 3000
+      AUTH0_SECRET: tyRq1XoJkc8umkfCWeOc6I1FhgI1hqUkHWk+ow4dDUk=
+      APP_BASE_URL: http://localhost:3000
+      AUTH0_DOMAIN: https://dev-k4r13j84dj0o13ss.us.auth0.com
+      AUTH0_CLIENT_ID: VvUgXCwI4Mao1o3ow77yJZHsJxZJek5Y
+      AUTH0_CLIENT_SECRET: iSJTzh_lJryXKM75h8Gp_hdD3m-D5OIDlK5UamR84VbdnRQPrI3mb2QFg_icx6dw
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    command: npm run dev  
+
+volumes:
+  db_data:
+
+

@@ -1,8 +1,5 @@
 import { auth0 } from '@/lib/auth0';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation'; 
-
-
 
 export default async function Home() { 
 	// fetch user session

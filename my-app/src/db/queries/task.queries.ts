@@ -9,7 +9,7 @@ export async function getAllTasksBelongToUserId(userId: string) {
     let res = await db
         .select()
         .from(tasks)
-        .where(eq(tasks.auth0_sub, userId))
+        .where(eq(tasks.authId, userId))
         .orderBy(asc(tasks.status), desc(tasks.urgent), desc(tasks.important), desc(tasks.updatedAt));
     return res;
 }  
@@ -20,7 +20,7 @@ export async function createNewTask(userId: string, title: string, description =
         .values({
             title,
             description,
-            auth0_sub: userId,
+            authId: userId,
         })
         .returning()
     return res[0];

@@ -1,0 +1,1 @@
+ALTER TABLE "tasks" RENAME COLUMN "auth0_sub" TO "authId";
