@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"builddev": "npm run build && next dev --turbopack", 
+		"buildstart": "npm run build && next start --turbopack",
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
@@ -40,7 +40,7 @@
 		"@types/react": "19",
 		"@types/react-dom": "19",
 		"drizzle-kit": "0.31.1",
-		"drizzle-seed": "0.3.1",
+		"drizzle-seed": "^0.3.1",
 		"tailwindcss": "4",
 		"typescript": "5"
 	}

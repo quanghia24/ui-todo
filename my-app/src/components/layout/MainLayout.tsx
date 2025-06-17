@@ -26,7 +26,7 @@ import BookIcon from '@mui/icons-material/Book';
 
 import { redirect } from "next/navigation";
 
-import ActionButton from "@/components/common/ActionButton"; 
+import ActionButton from "@/components/common/ActionButton";  
 
 const drawerWidth = 240;
 
@@ -140,8 +140,8 @@ export default function MainLayout({
                 redirect("/pomo"); 
             case "Habit":
                 redirect("/habit"); 
-            case "Blog":
-                redirect("/blog")
+            case "Mood tracker":
+                redirect("/mood")
             default:
                 console.error("Unknown page:", page);
                 return;
@@ -158,26 +158,26 @@ export default function MainLayout({
             <CssBaseline />
 
             {/* Side bar */}
-            <AppBar position="fixed" open={open}>
+            <AppBar position="fixed" open={open}> 
                 <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    sx={[
-                    {
-                        marginRight: 5,
-                    },
-                    open && { display: "none" },
-                    ]}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" noWrap component="div">
-                    {page}
-                </Typography>
-                </Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        edge="start"
+                        sx={[
+                        {
+                            marginRight: 5,
+                        },
+                        open && { display: "none" },
+                        ]}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" noWrap component="div">
+                        {page}
+                    </Typography>
+                </Toolbar> 
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <div className="flex flex-row items-center justify-between">
@@ -197,7 +197,7 @@ export default function MainLayout({
                 </div>
                 <Divider />
                 <List>
-                    {["Todos", "Eisenhower matrix", "Pomodoro", "Habit", "Blog"].map(
+                    {["Todos", "Eisenhower matrix", "Pomodoro", "Habit", "Mood tracker"].map(
                         (text, _) => (
                         <ListItem
                             onClick={() => handleChangePage(text)}
@@ -239,7 +239,7 @@ export default function MainLayout({
                                 {text === "Todos" && <ChecklistIcon />}
                                 {text === "Pomodoro" && <TimerIcon />}
                                 {text === "Habit" && <WhereToVoteIcon />}
-                                {text === "Blog" && <BookIcon/>}
+                                {text === "Mood tracker" && <BookIcon/>}
                             </ListItemIcon>
                             <ListItemText
                                 primary={text}

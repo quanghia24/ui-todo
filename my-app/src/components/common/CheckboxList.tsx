@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { List, ListItem, ListItemIcon, ListItemButton, Checkbox } from '@mui/material';
 
-import { useRemoveTasksMutation, useUpdateTasksMutation } from '@/lib/queries/tanstack.query';
+import { useRemoveTasksMutation, useUpdateTasksMutation } from '@/lib/queries/tasks.tanstack';
 import TaskCard from '@/components/common/TaskCard';
 import { Task } from '@/types/types'; 
 

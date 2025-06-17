@@ -1,0 +1,1 @@
+ALTER TABLE "posts" ALTER COLUMN "mood" SET DEFAULT 'ok';

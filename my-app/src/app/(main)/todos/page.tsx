@@ -9,7 +9,7 @@ export default async function TodosPage() {
         // set user_sub from cookie.
         const session = await auth0.getSession();
         if (!session) {
-            redirect('/auth/logic');
+            redirect('/auth/login');
         }
 
         const userId = session.user.sub;

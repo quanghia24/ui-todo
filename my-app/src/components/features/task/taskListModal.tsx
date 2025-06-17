@@ -5,7 +5,7 @@ import { useState } from "react";
 // internal 
 import CheckboxList from "@/components/common/CheckboxList";   
 import { Task } from "@/types/types"; 
-import { useAddTasksMutation, useGetTasksQuery } from "@/lib/queries/tanstack.query";
+import { useAddTasksMutation, useGetTasksQuery } from "@/lib/queries/tasks.tanstack";
 // local
 import DescriptionModal from "./descriptionModal";
 
@@ -28,8 +28,7 @@ export default function TodosList({
     const addMutation = useAddTasksMutation({userId, setChosenTodo, setNewTitle});
     
     const handleAddTask = () => {
-        addMutation.mutate(newTitle);
-        console.log(newTitle);
+        addMutation.mutate(newTitle); 
     }
 
     return (

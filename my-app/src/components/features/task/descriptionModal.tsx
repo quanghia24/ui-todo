@@ -6,7 +6,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import PriorityFlagsCard from '@/components/features/task/priorityFlagsCard';
 
 import { Task } from "@/types/types"
-import { useUpdateTasksMutation } from '@/lib/queries/tanstack.query';
+import { useUpdateTasksMutation } from '@/lib/queries/tasks.tanstack';
 
 export default function DescriptionModal ({ 
     todo, 
@@ -95,7 +95,7 @@ export default function DescriptionModal ({
                     </form>
                 </CardContent>
                 <div className='flex justify-end'>
-                    <p className="text-gray-500 italic font-extralight underline text-sm">Last update: {todo.updatedAt!.getDate()}/{todo.updatedAt!.getMonth()}</p>
+                    <p className="text-gray-500 italic font-extralight underline text-sm">Last updated: {todo.updatedAt!.toLocaleString()}</p>
                 </div>
 
             </Card>
