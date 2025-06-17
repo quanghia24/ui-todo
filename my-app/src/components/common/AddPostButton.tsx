@@ -1,14 +1,15 @@
 'use client'
 
 import { useState } from "react"
-import ActionButton from "./ActionButton";
 import { Card, CardContent, TextField, Divider } from "@mui/material";
-import MoodPicker from "../features/post/moodPicker";
+
+import MoodPicker from "@/components/features/post/moodPicker";
 import { createNewPost } from "@/db/queries/post.queries";
 import { InsertPostPayload } from "@/types/types"; 
 
-export type moodType = "sad" | "ok" | "happy"
+import ActionButton from "./ActionButton";
 
+export type moodType = "sad" | "ok" | "happy";
 
 export default function AddPostButton() {
   const [openInputModal, setOpenInputModal] = useState<boolean>(false);
@@ -44,35 +45,35 @@ export default function AddPostButton() {
         <Card className="p-3  h-[80vh]">
             <MoodPicker handlePickMood={setMood} mood={mood}/>
             <Divider orientation="horizontal"/>    
-            <CardContent>
-                <form action={() => {}}>
-                    <TextField
-                        sx={{
-                            mb: 2,
-                            '& .MuiInputBase-input': {
-                                fontSize: '1.5rem', // Increase font size for input text
-                            },
-                            '& .MuiInputLabel-root': {
-                                fontSize: '1.2rem', // Increase font size for label
-                            },
-                        }}
-                        fullWidth
-                        label="Title"
-                        id="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}           
-                    />
-                    {/* Description */}
-                    <TextField
-                        id="outlined-multiline-static"
-                        label="Description"  
-                        multiline
-                        fullWidth
-                        rows={22}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}                       
-                    />
-                </form>
+            <CardContent> 
+              {/* Title */}
+              <TextField
+                  sx={{
+                      mb: 2,
+                      '& .MuiInputBase-input': {
+                          fontSize: '1.5rem', // Increase font size for input text
+                      },
+                      '& .MuiInputLabel-root': {
+                          fontSize: '1.2rem', // Increase font size for label
+                      },
+                  }}
+                  fullWidth
+                  label="Title"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}           
+              />
+
+              {/* Description */}
+              <TextField
+                  id="outlined-multiline-static"
+                  label="Description"  
+                  multiline
+                  fullWidth
+                  rows={22}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}                       
+              /> 
             </CardContent>
         </Card> 
       </div> 

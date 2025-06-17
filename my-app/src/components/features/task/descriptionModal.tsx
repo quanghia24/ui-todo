@@ -1,12 +1,12 @@
 "use client"
 
-import { Divider, TextField, Card, CardContent } from '@mui/material'; 
 import { useEffect, useState } from "react" 
 import { useDebouncedCallback } from 'use-debounce';
-import PriorityFlagsCard from '@/components/features/task/priorityFlagsCard';
+import { Divider, TextField, Card, CardContent } from '@mui/material'; 
 
-import { Task } from "@/types/types"
 import { useUpdateTasksMutation } from '@/lib/queries/tasks.tanstack';
+import { Task } from "@/types/types"
+import PriorityFlagsCard from '@/components/features/task/priorityFlagsCard';
 
 export default function DescriptionModal ({ 
     todo, 

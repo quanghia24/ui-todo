@@ -1,6 +1,6 @@
-import { CardContent, IconButton } from "@mui/material"
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import FlagIcon from '@mui/icons-material/Flag';
+import { CardContent, IconButton } from "@mui/material"
 
 export default function PriorityFlagsCard ({
     priority,

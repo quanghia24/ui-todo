@@ -1,3 +1,4 @@
+import PostDetailPage from "@/components/features/post/postDetailPage";
 import { getAllPost, getPostById } from "@/db/queries/post.queries"
 
 export const revalidate = 60
@@ -19,18 +20,10 @@ export default async function ContentPage ({
     const { postId } = await params;
 		const post = await getPostById(postId); 
     if (!post) return <div>Post not found</div>;
+    
     return (
         <>
-          PostId: {postId} 
-          <div className="flex flex-col items-center">
-            <time className="text-sm text-gray-600">
-              {new Date(post.createdAt!).toLocaleDateString()}
-            </time>
-            <h2 className="border-b-2 text-2xl font-semibold">{post.title!}</h2>
-          </div>
-          <div className="mt-2 text-gray-700 overflow-ellipsis">
-            {post.description}
-          </div>
+          <PostDetailPage post={post}/>
         </>
     )
 }
